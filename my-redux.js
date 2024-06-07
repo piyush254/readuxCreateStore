@@ -1,16 +1,27 @@
-import { createStore } from "redux";
+import { combineReducers, createStore } from "redux";
 import { productList } from "./ProductList";
+import {
+  ADDITEM,
+  DECREASEBYONE,
+  INCREASEITEMQUANTITY,
+  REMOVEITEM,
+} from "./cartReducer";
+import wishlistREducer, {
+  WISHLISTADDITEM,
+  WISHLISTREMOVEITEM,
+} from "./wishListReducer";
+import cartReducer from "./cartReducer";
+import productReducer from "./ProductReducer";
 let initilState = {
   products: productList,
   cartItems: [],
   wishlist: [],
 };
-
+/*
 const ADDITEM = "store/addItem";
 const REMOVEITEM = "store/removeItem";
 const INCREASEITEMQUANTITY = "store/increaseItemQuantity";
 const DECREASEBYONE = "store/decreasebyOne";
-
 const WISHLISTADDITEM = "store/wishListaddItem";
 const WISHLISTREMOVEITEM = "store/wishListremoveItem";
 
@@ -42,17 +53,17 @@ function reducer(state = initilState, action) {
     case DECREASEBYONE:
       return {
         ...state,
-        cartItems: state.cartItems.map((item) => {
-          if (item.productId == action.payLoad.productId) {
-            return { ...item, quantity: item.quantity - 1 };
-          }
-          return item;
-        })
-        .filter((cartItem)=> cartItem.quantity > 0),
+        cartItems: state.cartItems
+          .map((item) => {
+            if (item.productId == action.payLoad.productId) {
+              return { ...item, quantity: item.quantity - 1 };
+            }
+            return item;
+          })
+          .filter((cartItem) => cartItem.quantity > 0),
       };
     case WISHLISTADDITEM:
       return { ...state, wishlist: [...state.wishlist, action.payLoad] };
-    default:
     case WISHLISTREMOVEITEM:
       return {
         ...state,
@@ -60,9 +71,18 @@ function reducer(state = initilState, action) {
           return wishlist.productId != action.payLoad.productId;
         }),
       };
+    default:
       return state;
   }
 }
+
+*/
+
+const reducer = combineReducers({
+  products: productReducer,
+  cartItems: cartReducer,
+  wishlist: wishlistREducer,
+});
 
 const store = createStore(reducer, window.__REDUX_DEVTOOLS_EXTENSION__?.());
 
